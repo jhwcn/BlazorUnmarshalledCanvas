@@ -1,0 +1,46 @@
+﻿@page "/"
+
+<button onclick="@Refresh">Hello, Canvas!</button><br/>
+<canvas width="400" height="400" id="theHtml5Canvas"></canvas>
+
+@functions{
+
+    public void Refresh()
+    {
+        this.StateHasChanged();
+    }
+
+    protected override void OnAfterRender()
+    {
+        base.OnAfterRender();
+
+        Canvas2d dc = new Canvas2d("theHtml5Canvas");
+        dc.ResetInvokeTimes();
+        int old = System.Environment.TickCount;
+        int width = 400, height = 400;
+        dc.ClearRect(0, 0, width, height);
+        Random _rdm = new Random(old);
+        Func<string> getRandomStyle = () => $"rgba({_rdm.Next(0, 255)}, {_rdm.Next(0, 255)}, {_rdm.Next(0, 255)}, 1)";
+        for (int ind = 0; ind < 100; ind++)
+        {
+            dc.FillStyle = getRandomStyle();
+            dc.StrokeStyle = getRandomStyle();
+            int x = _rdm.Next(0, width);
+            int y = _rdm.Next(0, height);
+            int w = _rdm.Next(0, width - x);
+            int h = _rdm.Next(0, height - y);
+            dc.FillRect(x, y, w, h);
+        }
+        for(int ind = 0; ind < 100; ind++)
+        {
+            dc.StrokeStyle = getRandomStyle();
+            int x1 = _rdm.Next(0, width);
+            int y1 = _rdm.Next(0, height);
+            int x2 = _rdm.Next(0, width);
+            int y2 = _rdm.Next(0, height);
+            dc.DrawLine(x1, y1, x2, y2);
+        }
+        System.Console.WriteLine("Draw time: " + (System.Environment.TickCount - old));
+        dc.DumpInvokeTimes();
+    }
+}
