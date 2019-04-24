@@ -56,4 +56,9 @@ And a reference to the canvas2dEx.js were apppended to the wwwroot/index.html af
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="js/Canvas2dEx.js"></script>
 ```
+After this, to draw a line, a simple line of code is enough:
+```csharp
+    Canvas2d dc = new Canvas2d("theHtml5Canvas");
+    dc.DrawLine(10, 10, 100, 100);
+```
 By extending the Canvas2d class, the drawing code can be better organized, and the performance can be improved further.
