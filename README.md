@@ -5,7 +5,7 @@ Unmarshalled invoking of Canvas 2d context from Blazor
 Blazor JavaScript interop depends on Json to marshall object between Javascipt and C#, that could be a problem on performance. With unmarshalled invoking methods provided by MonoWebAssemblyJSRuntime, the canvas drawing process could be a lot fast than using the Invoke method of JSInProcessRuntime.
 
 # How to use
-Add reference to the UmCanvas library, in the Blazor page @function part, create a Canvas2d object with the id of the target HTML5 canvas, and then call the wrapped methods of the "2d" context, that is it.
+Add a reference to the UmCanvas library, in the Blazor page @function part, create a Canvas2d object with the id of the target HTML5 canvas, and then call the wrapped methods of the "2d" context, that is it.
 
 ```csharp
 protected override void OnAfterRender()
@@ -29,7 +29,7 @@ Calling the basic methods provided by Canvas2d can work, but may not be satisfyi
     dc.LineTo(100, 100);
     dc.Stroke();
 ```
-Four interops are needed here, even the interops are unmarshalled, there is a big space for improvement. Canvas2dEx.cs and Canvas2dEx.js were createn in the Test project to extend the Canvas2d class, two corresponding simple methods were added:
+Four interops are needed here, even the interops are unmarshalled, there is a big space for improvement. Canvas2dEx.cs and Canvas2dEx.js were created in the Test project to extend the Canvas2d class, two corresponding simple methods were added:
 ```cssharp
     public static void DrawLine(this Canvas2d canvas, float x1, float y1, float x2, float y2)
     {
