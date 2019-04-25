@@ -1,5 +1,6 @@
 ﻿//This javascipt depends on Blazor.platform to parse the arguments from .net
 //for more information, please refer to https://github.com/aspnet/AspNetCore/blob/master/src/Components/Browser.JS/src/Platform/Platform.ts
+
 window.umc = {
     size2Client: function (d) {
         var id = Blazor.platform.readStringField(d, 0);
