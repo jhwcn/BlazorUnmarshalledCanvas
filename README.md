@@ -13,7 +13,7 @@ protected override void OnAfterRender()
     base.OnAfterRender();
 
     Canvas2d dc = new Canvas2d("theHtml5Canvas");
-    dc.ClearRect(0, 0, 400, 400);
+    dc.ClearRect(0, 0, dc.Width, dc.Height);
     dc.FillStyle = "red";
     dc.FillRect(10, 10, 200, 200);
     dc.FillStyle = "black";
@@ -39,7 +39,7 @@ Four interops are needed here, even the interops are unmarshalled, there is a bi
 ```javascript
 window.c2de = {
     drawLine: function (d) {
-        var dc = canvas2d_getContext(d);
+        var dc = c2d.canvas2d_getContext(d);
         var x1 = Blazor.platform.readFloatField(d, 4);
         var y1 = Blazor.platform.readFloatField(d, 8);
         var x2 = Blazor.platform.readFloatField(d, 12);
@@ -62,3 +62,20 @@ After this, to draw a line, a simple line of code is enough:
     dc.DrawLine(10, 10, 100, 100);
 ```
 By extending the Canvas2d class, the drawing code can be better organized, and the performance can be improved further.
+
+# Size of the Canvas
+To adjust the size of canvas in HTML is surprisingly difficult. Canvas actually has two kinds of "sizes", one is the size of the real canvas, another is the client size of the HTML control. 
+
+To draw the canvas fullscreen, 
+1) The control's size should be set to some percentage of the window, this can be done by using CSS.
+2) The width and height of the canvas should be set to the client size of the control, otherwise, the image will be stretched, 
+3) When the window size changes, the canvas may need to redraw itself. 
+
+With UmCanvas, a simple line of code will get 2 and 3 done:
+```csharp
+    Canvas2d dc = new Canvas2d("theHtml5Canvas");
+    dc.Size2Client(Refresh);
+```
+What Size2Client does are: 
+1) Run the Javascript code which sets the width and height of the canvas to its client size. (No stretch anymore.)
+2) When the window resizes, Javascript will call the DotNet method CanvasOnWindowResizedAsync which will execute the registered refresh action. (Refresh after resize.)
