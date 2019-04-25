@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.JSInterop;
 using Mono.WebAssembly.Interop;
 
 namespace UmCanvas
 {
     /// <summary>
-    /// Canvas class provide the basic unmarshalled interop invoking methods to a HTML5 canvas.
+    /// Provide the basic unmarshalled interop invoking methods to a HTML5 canvas.
+    /// Use ValueTuple to pass the arguments as struct easily
     /// </summary>
     public abstract class Canvas
     {
         private readonly string _id;
+        private int _width;
+        private int _height;
 
         /// <param name="id">the id of HTML 5 Canvas in DOM</param>
         public Canvas(string id)
         {
             _id = id;
+            _width = InvokeRet<int>("umc.getWidth");
+            _height = InvokeRet<int>("umc.getHeight");
         }
 
         public string Id
@@ -25,15 +32,71 @@ namespace UmCanvas
             get { return _id; }
         }
 
+        //get the width of the canvas
+        public int Width
+        {
+            get { return _width; }
+        }
+
+        //get the height of the canvas
+        public int Height
+        {
+            get { return _height; }
+        }
+
         /// <summary>
+        /// Release from CanvasOnWindowResizedAsync
         /// Release the cached 2d context of the HTML5 canvas in javascript
         /// </summary>
-        public abstract void Release();
-
-        private static readonly MonoWebAssemblyJSRuntime _runtime = new MonoWebAssemblyJSRuntime();
-        private static MonoWebAssemblyJSRuntime Runtime
+        public virtual void Release()
         {
-            get { return _runtime; }
+            lock (_dictCanvasOnWndResized)
+            {
+                _dictCanvasOnWndResized.Remove(Id);
+            }
+        }
+
+        /// <summary>
+        /// set the width height of the canvas to its client size
+        /// Need to do this manually because Blazor doesn't allow to put script element inside a component, 
+        /// see https://go.microsoft.com/fwlink/?linkid=872131
+        /// </summary>
+        /// <param name="onWndResized">the action to excute after javascript window.onResized.</param>
+        public void Size2Client(Action onWndResized)
+        {
+            Invoke("umc.size2Client", null != onWndResized ? 1 : 0);
+            lock (_dictCanvasOnWndResized)
+            {
+                if (null != onWndResized)
+                {
+                    _dictCanvasOnWndResized.TryGetValue(Id, out Action old);
+                    if (old != onWndResized)
+                        _dictCanvasOnWndResized[Id] = onWndResized;
+                }
+                else
+                {
+                    _dictCanvasOnWndResized.Remove(Id);
+                }
+            }
+            _width = InvokeRet<int>("umc.getWidth");
+            _height = InvokeRet<int>("umc.getHeight");
+        }
+
+        private static Dictionary<string, Action> _dictCanvasOnWndResized = new Dictionary<string, Action>();
+        /// <summary>
+        /// be called from Javascript window.onResize
+        /// </summary>
+        [JSInvokable]
+        public static async void CanvasOnWindowResizedAsync()
+        {
+            await Task.Run(() =>
+            {
+                lock (_dictCanvasOnWndResized)
+                {
+                    foreach (Action act in _dictCanvasOnWndResized.Values.ToArray())
+                        act();
+                }
+            });
         }
 
         #region invoke statics
@@ -78,6 +141,13 @@ namespace UmCanvas
             Console.WriteLine(sb.ToString());
         }
         #endregion
+
+        #region unmarshalled invoke methods
+        private static readonly MonoWebAssemblyJSRuntime _runtime = new MonoWebAssemblyJSRuntime();
+        private static MonoWebAssemblyJSRuntime Runtime
+        {
+            get { return _runtime; }
+        }
 
         public void Invoke(string identifier)
         {
@@ -225,5 +295,6 @@ namespace UmCanvas
             };
             return Runtime.InvokeUnmarshalled<ArgStruct9<string, T0, T1, T2, T3, T4, T5, T6, T7>, TRes>(identifier, arg);
         }
+        #endregion
     }
 }

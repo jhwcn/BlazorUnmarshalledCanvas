@@ -8,6 +8,7 @@ namespace Test
         {
             DrawLine(canvas, (float)x1, (float)y1, (float)x2, (float)y2);
         }
+
         public static void DrawLine(this Canvas2d canvas, float x1, float y1, float x2, float y2)
         {
             canvas.Invoke("c2de.drawLine", x1, y1, x2, y2);

@@ -1,6 +1,6 @@
 ﻿window.c2de = {
     drawLine: function (d) {
-        var dc = canvas2d_getContext(d);
+        var dc = c2d.canvas2d_getContext(d);
         var x1 = Blazor.platform.readFloatField(d, 4);
         var y1 = Blazor.platform.readFloatField(d, 8);
         var x2 = Blazor.platform.readFloatField(d, 12);
@@ -10,8 +10,9 @@
         dc.lineTo(x2, y2);
         dc.stroke();
     },
+
     drawArc: function (d) {
-        var dc = canvas2d_getContext(d);
+        var dc = c2d.canvas2d_getContext(d);
         var x = Blazor.platform.readFloatField(d, 4);
         var y = Blazor.platform.readFloatField(d, 8);
         var r = Blazor.platform.readFloatField(d, 12);
@@ -22,4 +23,4 @@
         dc.arc(x, y, r, s, e, a !== 0);
         dc.stroke();
     }
-}
+};
