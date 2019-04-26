@@ -65,6 +65,10 @@
         //dc.ClearRect(centerX - textWidth / 2, centerY - fontSize / 2, textWidth, fontSize);
         dc.FillStyle = "skyblue";
         dc.GlobalAlpha = 0.75f;
+        dc.ShadowColor = "red";
+        dc.ShadowOffsetX = 30.0f;
+        dc.ShadowOffsetY = 30.0f;
+        dc.ShadowBlur = 15.0f;
         dc.FillText(text, centerX, centerY);
         dc.GlobalAlpha = 1.0f;
 

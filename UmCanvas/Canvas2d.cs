@@ -258,6 +258,90 @@ namespace UmCanvas
             }
         }
 
+        private float? _shadowBlur;
+        public float ShadowBlur
+        {
+            get
+            {
+                if (null == _shadowBlur)
+                {
+                    string str = InvokeRet<string>("c2d.getShadowBlur");
+                    float.TryParse(str, out float sb);
+                    _shadowBlur = sb;
+                }
+                return _shadowBlur.Value;
+            }
+            set
+            {
+                if (_shadowBlur == value)
+                    return;
+                _shadowBlur = value;
+                Invoke("c2d.setShadowBlur", value);
+            }
+        }
+
+        private string _shadowColor;
+        public string ShadowColor
+        {
+            get
+            {
+                if (null == _shadowColor)
+                    _shadowColor = InvokeRet<string>("c2d.getShadowColor");
+                return _shadowColor;
+            }
+            set
+            {
+                if (_shadowColor == value)
+                    return;
+                _shadowColor = value;
+                Invoke("c2d.setShadowColor", value);
+            }
+        }
+
+        private float? _shadowOffsetX;
+        public float ShadowOffsetX
+        {
+            get
+            {
+                if (null == _shadowOffsetX)
+                {
+                    string str = InvokeRet<string>("c2d.getShadowOffsetX");
+                    float.TryParse(str, out float sb);
+                    _shadowOffsetX = sb;
+                }
+                return _shadowOffsetX.Value;
+            }
+            set
+            {
+                if (_shadowOffsetX == value)
+                    return;
+                _shadowOffsetX = value;
+                Invoke("c2d.setShadowOffsetX", value);
+            }
+        }
+
+        private float? _shadowOffsetY;
+        public float ShadowOffsetY
+        {
+            get
+            {
+                if (null == _shadowOffsetY)
+                {
+                    string str = InvokeRet<string>("c2d.getShadowOffsetY");
+                    float.TryParse(str, out float sb);
+                    _shadowOffsetY = sb;
+                }
+                return _shadowOffsetY.Value;
+            }
+            set
+            {
+                if (_shadowOffsetY == value)
+                    return;
+                _shadowOffsetY = value;
+                Invoke("c2d.setShadowOffsetY", value);
+            }
+        }
+
         public void ClearRect(double x, double y, double width, double height)
         {
             ClearRect((float)x, (float)y, (float)width, (float)height);

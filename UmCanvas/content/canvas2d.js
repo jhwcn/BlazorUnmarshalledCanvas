@@ -127,6 +127,46 @@ window.c2d = {
         dc.imageSmoothingEnabled = s !== 0;
     },
 
+    getShadowBlur: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.shadowBlur.toString());
+    },
+    setShadowBlur: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readFloat(d, 4);
+        dc.shadowBlur = a;
+    },
+
+    getShadowColor: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.shadowColor);
+    },
+    setShadowColor: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readString(d, 4);
+        dc.shadowColor = a;
+    },
+
+    getShadowOffsetX: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.shadowOffsetX.toString());
+    },
+    setShadowOffsetX: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readFloat(d, 4);
+        dc.shadowOffsetX = a;
+    },
+
+    getShadowOffsetY: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.shadowOffsetY.toString());
+    },
+    setShadowOffsetY: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readFloat(d, 4);
+        dc.shadowOffsetY = a;
+    },
+
     clearRect: function (d) {
         var dc = c2d.getContext(d);
         var x = jsi.readFloat(d, 4);
