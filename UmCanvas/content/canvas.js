@@ -1,13 +1,10 @@
-﻿//This javascipt depends on Blazor.platform to parse the arguments from .net
-//for more information, please refer to https://github.com/aspnet/AspNetCore/blob/master/src/Components/Browser.JS/src/Platform/Platform.ts
-
-window.umc = {
+﻿window.umc = {
     size2Client: function (d) {
-        var id = Blazor.platform.readStringField(d, 0);
+        var id = jsi.readString(d, 0);
         var c = document.getElementById(id);
         c.width = c.clientWidth;
         c.height = c.clientHeight;
-        var auto = Blazor.platform.readInt32Field(d, 4);
+        var auto = jsi.readInt32(d, 4);
         if (auto)
             umc.registerWindowResize();
     },
@@ -32,12 +29,12 @@ window.umc = {
     },
 
     getWidth: function (d) {
-        var id = Blazor.platform.readStringField(d, 0);
+        var id = jsi.readString(d, 0);
         var c = document.getElementById(id);
         return c.width;
     },
     getHeight: function (d) {
-        var id = Blazor.platform.readStringField(d, 0);
+        var id = jsi.readString(d, 0);
         var c = document.getElementById(id);
         return c.height;
     }

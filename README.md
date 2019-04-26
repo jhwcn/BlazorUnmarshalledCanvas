@@ -40,10 +40,11 @@ Four interops are needed here, even the interops are unmarshalled, there is a bi
 window.c2de = {
     drawLine: function (d) {
         var dc = c2d.canvas2d_getContext(d);
-        var x1 = Blazor.platform.readFloatField(d, 4);
-        var y1 = Blazor.platform.readFloatField(d, 8);
-        var x2 = Blazor.platform.readFloatField(d, 12);
-        var y2 = Blazor.platform.readFloatField(d, 16);
+		//jsi.readFloat is a concise wrap of Blazor.platform.readFloatField
+        var x1 = jsi.readFloat(d, 4);
+        var y1 = jsi.readFloat(d, 8);
+        var x2 = jsi.readFloat(d, 12);
+        var y2 = jsi.readFloat(d, 16);
         dc.beginPath();
         dc.moveTo(x1, y1);
         dc.lineTo(x2, y2);
@@ -51,7 +52,7 @@ window.c2de = {
     }
 }
 ```
-And a reference to the canvas2dEx.js were apppended to the wwwroot/index.html after the blazor.webassembly.js
+And then canvas2dEx.js was appended to the wwwroot/index.html, after the blazor.webassembly.js
 ```html
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="js/Canvas2dEx.js"></script>

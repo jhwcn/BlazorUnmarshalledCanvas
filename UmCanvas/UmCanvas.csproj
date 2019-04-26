@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <None Remove="content\canvas.js" />
+    <None Remove="content\JsInterop.js" />
   </ItemGroup>
 
   <ItemGroup>
