@@ -29,28 +29,66 @@
         Random rdm = new Random(old);
         Func<string> getRandomStyle = () => $"rgba({rdm.Next(0, 255)}, {rdm.Next(0, 255)}, {rdm.Next(0, 255)}, 1)";
 
-        //fill some random rects
+        //fill some random shapes
         for (int ind = 0; ind < 100; ind++)
         {
             dc.FillStyle = getRandomStyle();
-            int x = rdm.Next(0, dc.Width);
-            int y = rdm.Next(0, dc.Height);
-            int w = rdm.Next(0, dc.Width - x);
-            int h = rdm.Next(0, dc.Height - y);
-            dc.FillRect(x, y, w, h);
+            int cx = rdm.Next(0, dc.Width);
+            int cy = rdm.Next(0, dc.Height);
+            int rx = rdm.Next(0, Math.Min(cx, dc.Width - cx));
+            int ry = rdm.Next(0, Math.Min(cy, dc.Height - cy));
+            switch (rdm.Next(0, 3))
+            {
+                case 0:
+                    dc.BeginPath();
+                    dc.Circle(cx, cy, Math.Min(rx, ry));
+                    dc.Fill();
+                    break;
+                case 1:
+                    dc.BeginPath();
+                    dc.Ellipse(cx, cy, rx, ry);
+                    dc.Fill();
+                    break;
+                default:
+                    dc.FillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+                    break;
+            }
         }
 
-        //draw some random lines with the extended DrawLine method
+        //draw some random lines
         for (int ind = 0; ind < 100; ind++)
         {
             dc.StrokeStyle = getRandomStyle();
             dc.LineWidth = (float)(rdm.NextDouble() * 5);
             dc.LineCap = (LineCap)rdm.Next(0, 3);
-            int x1 = rdm.Next(0, dc.Width);
-            int y1 = rdm.Next(0, dc.Height);
-            int x2 = rdm.Next(0, dc.Width);
-            int y2 = rdm.Next(0, dc.Height);
-            dc.DrawLine(x1, y1, x2, y2);
+            int lt = rdm.Next(0, 3);
+            if (lt == 0)
+            {
+                dc.DrawLine(rdm.Next(0, dc.Width), rdm.Next(0, dc.Height), rdm.Next(0, dc.Width), rdm.Next(0, dc.Height));
+            }
+            else
+            {
+                double start = rdm.NextDouble();
+                double span = (1.0 - start) * rdm.NextDouble() + start;
+                double end = (start + span) * Math.PI * 2;
+                start *= Math.PI * 2;
+
+                bool anticlocksize = rdm.Next(0, 1) == 0;
+                int cx = rdm.Next(0, dc.Width);
+                int cy = rdm.Next(0, dc.Height);
+                int rx = Math.Min(cx, dc.Width - cx);
+                int ry = Math.Min(cy, dc.Height - cy);
+                dc.BeginPath();
+                if (lt == 1)
+                {
+                    dc.Arc(cx, cy, Math.Min(rx, ry) * rdm.NextDouble(), start, end, anticlocksize);
+                }
+                else
+                {
+                    dc.Ellipse(cx, cy, rx * rdm.NextDouble(), ry * rdm.NextDouble(), 0, start, end, anticlocksize);
+                }
+                dc.Stroke();
+            }
         }
 
         //draw some text at the center point
@@ -64,25 +102,28 @@
         float centerY = dc.Height / 2;
         //dc.ClearRect(centerX - textWidth / 2, centerY - fontSize / 2, textWidth, fontSize);
         dc.FillStyle = "skyblue";
+        dc.Save();
         dc.GlobalAlpha = 0.75f;
         dc.ShadowColor = "red";
-        dc.ShadowOffsetX = 30.0f;
-        dc.ShadowOffsetY = 30.0f;
+        dc.ShadowOffsetX = 15.0f;
+        dc.ShadowOffsetY = 15.0f;
         dc.ShadowBlur = 15.0f;
         dc.FillText(text, centerX, centerY);
-        dc.GlobalAlpha = 1.0f;
+        dc.Restore();
 
         //test CompositeOperation
-        if (_drawTime > 5)
+        if (_drawTime > 3)
         {
             CompositeOperation co = (CompositeOperation)rdm.Next(0, (int)CompositeOperation.Luminosity);
             dc.GlobalCompositeOperation = co;
-            dc.FillText(text, centerX, centerY + fontSize + 5);
+            dc.RotateAt(centerX, centerY, Math.PI / 2);
+            dc.FillText(text, centerX, centerY);
             dc.GlobalCompositeOperation = CompositeOperation.Source_Over;
-            dc.FillText("Composite: " + co.ToString(), centerX, centerY + (fontSize + 5) * 2);
+            dc.ResetTransform();
+            dc.FillText("Composite: " + co.ToString(), centerX, centerY + (fontSize + 5));
         }
 
-        //test properties
+        //test some properties
         //Console.WriteLine("ImageSmoothingEnabled:" + dc.ImageSmoothingEnabled.ToString());
         //dc.ImageSmoothingEnabled = false;
         //Console.WriteLine("ImageSmoothingEnabled:" + dc.ImageSmoothingEnabled.ToString());

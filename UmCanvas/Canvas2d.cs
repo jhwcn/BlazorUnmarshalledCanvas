@@ -455,6 +455,28 @@ namespace UmCanvas
             Invoke("c2d.closePath");
         }
 
+        /// <param name="nonzero">nonzero or evenodd</param>
+        public bool IsPointInPath(double x, double y, bool evenodd = false)
+        {
+            return IsPointInPath((float)x, (float)y, evenodd);
+        }
+
+        /// <param name="nonzero">nonzero or evenodd</param>
+        public bool IsPointInPath(float x, float y, bool evenodd = false)
+        {
+            return InvokeRet<int, bool>("c2d.isPointInPath", evenodd ? 1 : 0);
+        }
+
+        public bool IsPointInStroke(double x, double y)
+        {
+            return IsPointInStroke((float)x, (float)y);
+        }
+
+        public bool IsPointInStroke(float x, float y, bool nonzero = true)
+        {
+            return InvokeRet<bool>("c2d.isPointInStroke");
+        }
+
         public void MoveTo(double x, double y)
         {
             MoveTo((float)x, (float)y);
@@ -495,14 +517,24 @@ namespace UmCanvas
             Invoke("c2d.quadraticCurveTo", cpx, cpy, x, y);
         }
 
-        public void Arc(double x, double y, double radius, double startAngle, double endAngle, bool? anticlockwise = null)
+        public void Arc(double x, double y, double radius, double startAngle, double endAngle, bool anticlockwise = false)
         {
             Arc((float)x, (float)y, (float)radius, (float)startAngle, (float)endAngle, anticlockwise);
         }
 
-        public void Arc(float x, float y, float radius, float startAngle, float endAngle, bool? anticlockwise = null)
+        public void Arc(float x, float y, float radius, float startAngle, float endAngle, bool anticlockwise = false)
         {
-            Invoke("c2d.arc", x, y, radius, startAngle, endAngle, anticlockwise == true ? 1 : 0);
+            Invoke("c2d.arc", x, y, radius, startAngle, endAngle, anticlockwise ? 1 : 0);
+        }
+
+        public void Circle(double x, double y, double radius)
+        {
+            Circle((float)x, (float)y, (float)radius);
+        }
+
+        public void Circle(float x, float y, float radius)
+        {
+            Arc(x, y, radius, 0.0f, (float)(Math.PI * 2));
         }
 
         public void ArcTo(double x1, double y1, double x2, double y2, double radius)
@@ -523,6 +555,16 @@ namespace UmCanvas
         public void Rect(float x, float y, float width, float height)
         {
             Invoke("c2d.rect", x, y, width, height);
+        }
+
+        public void Ellipse(double x, double y, double radiusX, double radiusY, double rotation = 0, double startAngle = 0, double endAngle = Math.PI * 2, bool anticlockwise = false)
+        {
+            Ellipse((float)x, (float)y, (float)radiusX, (float)radiusY, (float)rotation, (float)startAngle, (float)endAngle, anticlockwise);
+        }
+
+        public void Ellipse(float x, float y, float radiusX, float radiusY, float rotation = 0f, float startAngle = 0f, float endAngle = (float)(Math.PI * 2), bool anticlockwise = false)
+        {
+            Invoke("c2d.ellipse", x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise ? 1 : 0);
         }
 
         public void Fill()
@@ -548,6 +590,16 @@ namespace UmCanvas
         public void Rotate(float angle)
         {
             Invoke("c2d.rotate", angle);
+        }
+
+        public void RotateAt(double x, double y, double angle)
+        {
+            RotateAt((float)x, (float)y, (float)angle);
+        }
+
+        public void RotateAt(float x, float y, float angle)
+        {
+            Invoke("c2d.rotateAt", x, y, angle);
         }
 
         public void Scale(double x, double y)
@@ -588,6 +640,11 @@ namespace UmCanvas
         public void SetTransform(float m11, float m12, float m21, float m22, float dx, float dy)
         {
             Invoke("c2d.setTransform", m11, m12, m21, m22, dx, dy);
+        }
+
+        public void ResetTransform()
+        {
+            Invoke("c2d.resetTransform");
         }
 
         public void Save()

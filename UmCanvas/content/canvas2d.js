@@ -256,6 +256,20 @@ window.c2d = {
         dc.closePath();
     },
 
+    isPointInPath: function (d) {
+        var dc = c2d.getContext(d);
+        var x = jsi.readFloat(d, 4);
+        var y = jsi.readFloat(d, 8);
+        var e = jsi.readInt32(d, 12);
+        return dc.isPointInPath(x, y, e === 0 ? "nonzero" : "evenodd");
+    },
+    isPointInStroke: function (d) {
+        var dc = c2d.getContext(d);
+        var x = jsi.readFloat(d, 4);
+        var y = jsi.readFloat(d, 8);
+        return dc.isPointInStroke(x, y);
+    },
+
     moveTo: function (d) {
         var dc = c2d.getContext(d);
         var x = jsi.readFloat(d, 4);
@@ -313,6 +327,18 @@ window.c2d = {
         var h = jsi.readFloat(d, 16);
         dc.rect(x, y, w, h);
     },
+    ellipse: function (d) {
+        var dc = c2d.getContext(d);
+        var x = jsi.readFloat(d, 4);
+        var y = jsi.readFloat(d, 8);
+        var rx = jsi.readFloat(d, 12);
+        var ry = jsi.readFloat(d, 16);
+        var ro = jsi.readFloat(d, 20);
+        var s = jsi.readFloat(d, 24);
+        var e = jsi.readFloat(d, 28);
+        var a = jsi.readInt32(d, 32);
+        dc.ellipse(x, y, rx, ry, ro, s, e, a !== 0);
+    },
 
     fill: function (d) {
         var dc = c2d.getContext(d);
@@ -331,6 +357,15 @@ window.c2d = {
         var dc = c2d.getContext(d);
         var a = jsi.readFloat(d, 4);
         dc.rotate(a);
+    },
+    rotateAt: function (d) {
+        var dc = c2d.getContext(d);
+        var x = jsi.readFloat(d, 4);
+        var y = jsi.readFloat(d, 8);
+        var a = jsi.readFloat(d, 12);
+        dc.translate(x, y);
+        dc.rotate(a);
+        dc.translate(-x, -y);
     },
     scale: function (d) {
         var dc = c2d.getContext(d);
@@ -363,6 +398,10 @@ window.c2d = {
         var dx = jsi.readFloat(d, 20);
         var dy = jsi.readFloat(d, 24);
         dc.setTransform(m11, m12, m21, m22, dx, dy);
+    },
+    resetTransform: function (d) {
+        var dc = c2d.getContext(d);
+        dc.setTransform(1, 0, 0, 1, 0, 0);
     },
 
     save: function (d) {
