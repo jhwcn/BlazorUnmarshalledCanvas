@@ -99,7 +99,7 @@ namespace UmCanvas
             });
         }
 
-        #region invoke statics
+        #region invoke statistics
         private Dictionary<string, int> _invokeTimes;
 
         [Conditional("DEBUG")]

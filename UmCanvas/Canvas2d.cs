@@ -1,5 +1,11 @@
-﻿namespace UmCanvas
+﻿using System;
+
+namespace UmCanvas
 {
+    public enum TextAlign { Start, Left, Right, Center, End }
+
+    public enum TextBaseline { Alphabetic, Top, Hanging, Middle, Ideographic, Bottom }
+
     /// <summary>
     /// Provides invoking methods to the "2d" context of the HTML5 canvas.
     /// </summary>
@@ -66,6 +72,50 @@
                     return;
                 _font = value;
                 Invoke("c2d.setFont", value);
+            }
+        }
+
+        private TextAlign? _textAlign;
+        public TextAlign TextAlign
+        {
+            get
+            {
+                if (null == _textAlign)
+                {
+                    string str = InvokeRet<string>("c2d.getTextAlign");
+                    Enum.TryParse(str, true, out TextAlign ret);
+                    _textAlign = ret;
+                }
+                return _textAlign.Value;
+            }
+            set
+            {
+                if (_textAlign == value)
+                    return;
+                _textAlign = value;
+                Invoke("c2d.setTextAlign", value.ToString().ToLower());
+            }
+        }
+
+        private TextBaseline? _textBaseline;
+        public TextBaseline TextBaseline
+        {
+            get
+            {
+                if (null == _textBaseline)
+                {
+                    string str = InvokeRet<string>("c2d.getTextBaseline");
+                    Enum.TryParse(str, true, out TextBaseline ret);
+                    _textBaseline = ret;
+                }
+                return _textBaseline.Value;
+            }
+            set
+            {
+                if (_textBaseline == value)
+                    return;
+                _textBaseline = value;
+                Invoke("c2d.setTextBaseline", value.ToString().ToLower());
             }
         }
 

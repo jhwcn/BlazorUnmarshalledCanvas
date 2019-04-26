@@ -15,13 +15,19 @@
     {
         base.OnAfterRender();
 
+        //create the canvas 2d context by the id of HTML canvas.
         Canvas2d dc = new Canvas2d("theHtml5Canvas");
+
+        //fit canvas to control, and register Refresh to window.Resize
         dc.Size2Client(Refresh);
+
         dc.ResetInvokeTimes();
         int old = System.Environment.TickCount;
         dc.ClearRect(0, 0, dc.Width, dc.Height);
         Random rdm = new Random(old);
         Func<string> getRandomStyle = () => $"rgba({rdm.Next(0, 255)}, {rdm.Next(0, 255)}, {rdm.Next(0, 255)}, 1)";
+
+        //fill some random rects
         for (int ind = 0; ind < 100; ind++)
         {
             dc.FillStyle = getRandomStyle();
@@ -31,6 +37,8 @@
             int h = rdm.Next(0, dc.Height - y);
             dc.FillRect(x, y, w, h);
         }
+
+        //draw some random lines with the extended DrawLine method
         for (int ind = 0; ind < 100; ind++)
         {
             dc.StrokeStyle = getRandomStyle();
@@ -40,6 +48,23 @@
             int y2 = rdm.Next(0, dc.Height);
             dc.DrawLine(x1, y1, x2, y2);
         }
+
+        //draw some text at the center point
+        string text = "Abcdefghijklmnopqrstuvwxyz";
+        float fontSize = 48.0f;
+        dc.Font = $"bold {fontSize}px Verdana";
+        dc.TextAlign = TextAlign.Center;
+        dc.TextBaseline = TextBaseline.Middle;
+        float textWidth = dc.MeasureText(text);
+        float centerX = dc.Width / 2;
+        float centerY = dc.Height / 2;
+        float textLeft = centerX - textWidth / 2;
+        float textTop = centerY - fontSize / 2;
+        dc.ClearRect(textLeft, textTop, textWidth, fontSize);
+        dc.FillStyle = "skyblue";
+        dc.FillText(text, centerX, centerY);
+
+        //dump the timespan and statistics
         System.Console.WriteLine("Draw time: " + (System.Environment.TickCount - old));
         dc.DumpInvokeTimes();
     }

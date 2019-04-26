@@ -47,6 +47,26 @@ window.c2d = {
         dc.font = f;
     },
 
+    getTextAlign: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.textAlign.toString());
+    },
+    setTextAlign: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readString(d, 4);
+        dc.textAlign = a;
+    },
+
+    getTextBaseline: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.textBaseline.toString());
+    },
+    setTextBaseline: function (d) {
+        var dc = c2d.getContext(d);
+        var b = jsi.readString(d, 4);
+        dc.textBaseline = b;
+    },
+
     getLineWidth: function (d) {
         var dc = c2d.getContext(d);
         return jsi.toDotNetStr(dc.lineWidth.toString());
