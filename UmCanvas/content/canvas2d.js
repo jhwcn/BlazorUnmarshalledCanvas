@@ -49,7 +49,7 @@ window.c2d = {
 
     getTextAlign: function (d) {
         var dc = c2d.getContext(d);
-        return jsi.toDotNetStr(dc.textAlign.toString());
+        return jsi.toDotNetStr(dc.textAlign);
     },
     setTextAlign: function (d) {
         var dc = c2d.getContext(d);
@@ -59,7 +59,7 @@ window.c2d = {
 
     getTextBaseline: function (d) {
         var dc = c2d.getContext(d);
-        return jsi.toDotNetStr(dc.textBaseline.toString());
+        return jsi.toDotNetStr(dc.textBaseline);
     },
     setTextBaseline: function (d) {
         var dc = c2d.getContext(d);
@@ -74,7 +74,27 @@ window.c2d = {
     setLineWidth: function (d) {
         var dc = c2d.getContext(d);
         var w = jsi.readFloat(d, 4);
-        dc.LineWidth = w;
+        dc.lineWidth = w;
+    },
+
+    getLineCap: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.lineCap);
+    },
+    setLineCap: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readString(d, 4);
+        dc.lineCap = a;
+    },
+
+    getMiterLimit: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.miterLimit.toString());
+    },
+    setMiterLimit: function (d) {
+        var dc = c2d.getContext(d);
+        var a = jsi.readFloat(d, 4);
+        dc.miterLimit = a;
     },
 
     getGlobalAlpha: function (d) {
@@ -85,6 +105,26 @@ window.c2d = {
         var dc = c2d.getContext(d);
         var a = jsi.readFloat(d, 4);
         dc.globalAlpha = a;
+    },
+
+    getGlobalCompositeOperation: function (d) {
+        var dc = c2d.getContext(d);
+        return jsi.toDotNetStr(dc.globalCompositeOperation);
+    },
+    setGlobalCompositeOperation: function (d) {
+        var dc = c2d.getContext(d);
+        var c = jsi.readString(d, 4);
+        dc.globalCompositeOperation = c;
+    },
+
+    getImageSmoothingEnabled: function (d) {
+        var dc = c2d.getContext(d);
+        return dc.imageSmoothingEnabled;
+    },
+    setImageSmoothingEnabled: function (d) {
+        var dc = c2d.getContext(d);
+        var s = jsi.readInt32(d, 4);
+        dc.imageSmoothingEnabled = s !== 0;
     },
 
     clearRect: function (d) {

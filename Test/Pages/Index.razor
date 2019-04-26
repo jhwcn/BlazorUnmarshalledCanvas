@@ -6,6 +6,8 @@
 </div>
 
 @functions{
+    private int _drawTime = 0;
+
     public void Refresh()
     {
         this.StateHasChanged();
@@ -42,6 +44,8 @@
         for (int ind = 0; ind < 100; ind++)
         {
             dc.StrokeStyle = getRandomStyle();
+            dc.LineWidth = (float)(rdm.NextDouble() * 5);
+            dc.LineCap = (LineCap)rdm.Next(0, 3);
             int x1 = rdm.Next(0, dc.Width);
             int y1 = rdm.Next(0, dc.Height);
             int x2 = rdm.Next(0, dc.Width);
@@ -51,21 +55,43 @@
 
         //draw some text at the center point
         string text = "Abcdefghijklmnopqrstuvwxyz";
-        float fontSize = 48.0f;
+        float fontSize = 36.0f;
         dc.Font = $"bold {fontSize}px Verdana";
         dc.TextAlign = TextAlign.Center;
         dc.TextBaseline = TextBaseline.Middle;
         float textWidth = dc.MeasureText(text);
         float centerX = dc.Width / 2;
         float centerY = dc.Height / 2;
-        float textLeft = centerX - textWidth / 2;
-        float textTop = centerY - fontSize / 2;
-        dc.ClearRect(textLeft, textTop, textWidth, fontSize);
+        //dc.ClearRect(centerX - textWidth / 2, centerY - fontSize / 2, textWidth, fontSize);
         dc.FillStyle = "skyblue";
+        dc.GlobalAlpha = 0.75f;
         dc.FillText(text, centerX, centerY);
+        dc.GlobalAlpha = 1.0f;
+
+        //test CompositeOperation
+        if (_drawTime > 5)
+        {
+            CompositeOperation co = (CompositeOperation)rdm.Next(0, (int)CompositeOperation.Luminosity);
+            dc.GlobalCompositeOperation = co;
+            dc.FillText(text, centerX, centerY + fontSize + 5);
+            dc.GlobalCompositeOperation = CompositeOperation.Source_Over;
+            dc.FillText("Composite: " + co.ToString(), centerX, centerY + (fontSize + 5) * 2);
+        }
+
+        //test properties
+        //Console.WriteLine("ImageSmoothingEnabled:" + dc.ImageSmoothingEnabled.ToString());
+        //dc.ImageSmoothingEnabled = false;
+        //Console.WriteLine("ImageSmoothingEnabled:" + dc.ImageSmoothingEnabled.ToString());
+        //Console.WriteLine("MiterLimit:" + dc.MiterLimit.ToString());
+        //dc.MiterLimit = 5.0f;
+        //Console.WriteLine("MiterLimit:" + dc.MiterLimit.ToString());
+        //Canvas2d dc1 = new Canvas2d("theHtml5Canvas");
+        //Console.WriteLine("MiterLimit:" + dc1.MiterLimit.ToString());
 
         //dump the timespan and statistics
         System.Console.WriteLine("Draw time: " + (System.Environment.TickCount - old));
-        dc.DumpInvokeTimes();
+        //dc.DumpInvokeTimes();
+
+        _drawTime++;
     }
 }

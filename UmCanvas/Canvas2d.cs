@@ -6,6 +6,17 @@ namespace UmCanvas
 
     public enum TextBaseline { Alphabetic, Top, Hanging, Middle, Ideographic, Bottom }
 
+    public enum LineCap { Butt, Round, Square }
+
+    public enum CompositeOperation
+    {
+        Source_Over, Source_In, Source_Out, Source_Atop,
+        Destination_Over, Destination_In, Destination_Out, Destination_Atop,
+        Lighter, Copy, Xor, Multiply, Screen, Overlay, Darken, Lighten,
+        Color_Dodge, Color_Burn, Hard_Light, Soft_Light, Difference, Exclusion,
+        Hue, Saturation, Color, Luminosity,
+    }
+
     /// <summary>
     /// Provides invoking methods to the "2d" context of the HTML5 canvas.
     /// </summary>
@@ -141,6 +152,50 @@ namespace UmCanvas
             }
         }
 
+        private LineCap? _lineCap;
+        public LineCap LineCap
+        {
+            get
+            {
+                if (null == _lineCap)
+                {
+                    string str = InvokeRet<string>("c2d.getLineCap");
+                    Enum.TryParse(str, true, out LineCap ret);
+                    _lineCap = ret;
+                }
+                return _lineCap.Value;
+            }
+            set
+            {
+                if (_lineCap == value)
+                    return;
+                _lineCap = value;
+                Invoke("c2d.setLineCap", value.ToString().ToLower());
+            }
+        }
+
+        private float? _miterLimit;
+        public float MiterLimit
+        {
+            get
+            {
+                if (null == _miterLimit)
+                {
+                    string str = InvokeRet<string>("c2d.getMiterLimit");
+                    float.TryParse(str, out float ga);
+                    _miterLimit = ga;
+                }
+                return _miterLimit.Value;
+            }
+            set
+            {
+                if (_miterLimit == value)
+                    return;
+                _miterLimit = value;
+                Invoke("c2d.setMiterLimit", value);
+            }
+        }
+
         private float? _globalAlpha;
         public float GlobalAlpha
         {
@@ -160,6 +215,46 @@ namespace UmCanvas
                     return;
                 _globalAlpha = value;
                 Invoke("c2d.setGlobalAlpha", value);
+            }
+        }
+
+        private CompositeOperation? _globalCO;
+        public CompositeOperation GlobalCompositeOperation
+        {
+            get
+            {
+                if (null == _globalCO)
+                {
+                    string str = InvokeRet<string>("c2d.getGlobalCompositeOperation")?.Replace('-', '_');
+                    Enum.TryParse(str, true, out CompositeOperation ret);
+                    _globalCO = ret;
+                }
+                return _globalCO.Value;
+            }
+            set
+            {
+                if (_globalCO == value)
+                    return;
+                _globalCO = value;
+                Invoke("c2d.setGlobalCompositeOperation", value.ToString().ToLower().Replace('_', '-'));
+            }
+        }
+
+        private bool? _imageSmoothingEnabled;
+        public bool ImageSmoothingEnabled
+        {
+            get
+            {
+                if (null == _imageSmoothingEnabled)
+                    _imageSmoothingEnabled = InvokeRet<bool>("c2d.getImageSmoothingEnabled");
+                return _imageSmoothingEnabled.Value;
+            }
+            set
+            {
+                if (_imageSmoothingEnabled == value)
+                    return;
+                _imageSmoothingEnabled = value;
+                Invoke("c2d.setImageSmoothingEnabled", value ? 1 : 0);
             }
         }
 
