@@ -464,7 +464,7 @@ namespace UmCanvas
         /// <param name="nonzero">nonzero or evenodd</param>
         public bool IsPointInPath(float x, float y, bool evenodd = false)
         {
-            return InvokeRet<int, bool>("c2d.isPointInPath", evenodd ? 1 : 0);
+            return InvokeRet<float, float, int, bool>("c2d.isPointInPath", x, y, evenodd ? 1 : 0);
         }
 
         public bool IsPointInStroke(double x, double y)
@@ -472,9 +472,9 @@ namespace UmCanvas
             return IsPointInStroke((float)x, (float)y);
         }
 
-        public bool IsPointInStroke(float x, float y, bool nonzero = true)
+        public bool IsPointInStroke(float x, float y)
         {
-            return InvokeRet<bool>("c2d.isPointInStroke");
+            return InvokeRet<float, float, bool>("c2d.isPointInStroke", x, y);
         }
 
         public void MoveTo(double x, double y)
