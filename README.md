@@ -2,7 +2,7 @@
 Unmarshalled invoking of Canvas 2d context from Blazor
 
 # Why unmarshalled
-Blazor JavaScript interop depends on Json to marshall object between Javascipt and C#, that could be a problem on performance. With unmarshalled invoking methods provided by MonoWebAssemblyJSRuntime, the canvas drawing process could be a lot fast than using the Invoke method of JSInProcessRuntime.
+Blazor JavaScript interop depends on Json to marshall object between Javascript and C#, that could be a problem on performance. With unmarshalled invoking methods provided by MonoWebAssemblyJSRuntime, the canvas drawing process could be **much faster** than the normal invoke, it is **50 times faster** for passing 2 float value, and this number will increase rapidly with the complexity and the size of the data.
 
 # How to use
 Add a reference to the UmCanvas library, in the Blazor page @function part, create a Canvas2d object with the id of the target HTML5 canvas, and then call the wrapped methods of the "2d" context, that is it.
@@ -65,7 +65,7 @@ After this, to draw a line, a simple line of code is enough:
 By extending the Canvas2d class, the drawing code can be better organized, and the performance can be improved further.
 
 # Size of the Canvas
-To adjust the size of canvas in HTML is surprisingly difficult. Canvas actually has two kinds of "sizes", one is the size of the real canvas, another is the client size of the HTML control. 
+To adjust the size of the canvas in HTML is surprisingly difficult. Canvas actually has two kinds of "sizes", one is the size of the real canvas, another is the client size of the HTML control. 
 
 To draw the canvas fullscreen, 
 1) The control's size should be set to some percentage of the window, this can be done by using CSS.
