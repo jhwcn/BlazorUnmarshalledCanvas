@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
-using Mono.WebAssembly.Interop;
+using Microsoft.JSInterop.WebAssembly;
 
 namespace UmCanvas
 {
@@ -143,8 +143,12 @@ namespace UmCanvas
         #endregion
 
         #region unmarshalled invoke methods
-        private static readonly MonoWebAssemblyJSRuntime _runtime = new MonoWebAssemblyJSRuntime();
-        private static MonoWebAssemblyJSRuntime Runtime
+        private sealed class MyWebAssemblyJSRuntime : WebAssemblyJSRuntime
+        {
+
+        }
+        private static readonly WebAssemblyJSRuntime _runtime = new MyWebAssemblyJSRuntime();
+        private static WebAssemblyJSRuntime Runtime
         {
             get { return _runtime; }
         }

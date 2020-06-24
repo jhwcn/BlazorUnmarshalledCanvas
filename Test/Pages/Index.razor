@@ -2,7 +2,7 @@
 
 <div style="margin:auto;width:80%;height:100%;position:relative">
     <canvas style="width:100%;height:100%" id="theHtml5Canvas"></canvas>
-    <button onclick="@Refresh" style="position:absolute;top:0;left:0">Hello, Canvas!</button>
+    <button @onclick="Refresh" style="position:absolute;top:0;left:0">Hello, Canvas!</button>
 </div>
 
 @functions{
@@ -13,9 +13,9 @@
         this.StateHasChanged();
     }
 
-    protected override void OnAfterRender()
+    protected override void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender();
+        base.OnAfterRender(firstRender);
 
         //create the canvas 2d context by the id of HTML canvas.
         Canvas2d dc = new Canvas2d("theHtml5Canvas");

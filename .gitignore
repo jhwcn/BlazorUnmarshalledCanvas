@@ -1,3 +1,4 @@
 .vs
 bin
 obj
+/Test/Test.csproj.user
