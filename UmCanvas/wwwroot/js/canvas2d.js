@@ -192,6 +192,41 @@ window.c2d = {
         dc.strokeRect(x, y, w, h);
     },
 
+    drawImage: function (d) {
+        var dc = c2d.getContext(d);
+        var id = jsi.readString(d, 4);
+        var dx = jsi.readFloat(d,  8);
+        var dy = jsi.readFloat(d, 12);
+        var img = document.getElementById(id);
+        dc.drawImage(img, dx, dy);
+    },
+
+    drawImage2: function (d) {
+        var dc = c2d.getContext(d);
+        var id = jsi.readString(d, 4);
+        var dx = jsi.readFloat(d,  8);
+        var dy = jsi.readFloat(d, 12);
+        var dw = jsi.readFloat(d, 16);
+        var dh = jsi.readFloat(d, 20);
+        var img = document.getElementById(id);
+        dc.drawImage(img, dx, dy, dw, dh);
+    },
+
+    drawImage3: function (d) {
+        var dc = c2d.getContext(d);
+        var id = jsi.readString(d, 4);
+        var sx = jsi.readFloat(d,  8);
+        var sy = jsi.readFloat(d, 12);
+        var sw = jsi.readFloat(d, 16);
+        var sh = jsi.readFloat(d, 20);
+        var dx = jsi.readFloat(d, 24);
+        var dy = jsi.readFloat(d, 28);
+        var dw = jsi.readFloat(d, 32);
+        var dh = jsi.readFloat(d, 36);
+        var img = document.getElementById(id);
+        dc.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+    },
+
     fillText: function (d) {
         var dc = c2d.getContext(d);
         var t = jsi.readString(d, 4);

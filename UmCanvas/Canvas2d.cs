@@ -372,6 +372,36 @@ namespace UmCanvas
             Invoke("c2d.strokeRect", x, y, width, height);
         }
 
+        public void DrawImage(string imgid, double dx, double dy)
+        {
+            DrawImage(imgid, (float)dx, (float)dy);
+        }
+
+        public void DrawImage(string imgid, float dx, float dy)
+        {
+            Invoke("c2d.drawImage", imgid, dx, dy);
+        }
+
+        public void DrawImage(string imgid, double dx, double dy, double dwidth, double dheight)
+        {
+            DrawImage(imgid, (float)dx, (float)dy, (float)dwidth, (float)dheight);
+        }
+
+        public void DrawImage(string imgid, float dx, float dy, float dwidth, float dheight)
+        {
+            Invoke("c2d.drawImage1", imgid, dx, dy, dwidth, dheight);
+        }
+
+        public void DrawImage(string imgid, double sx, double sy, double swidth, double sheight, double dx, double dy, float dwidth, double dheight)
+        {
+            DrawImage(imgid, (float)sx, (float)sy, (float)swidth, (float)sheight, (float)dx, (float)dy, (float)dwidth, (float)dheight);
+        }
+
+        public void DrawImage(string imgid, float sx, float sy, float swidth, float sheight, float dx, float dy, float dwidth, float dheight)
+        {
+            Invoke("c2d.drawImage2", imgid, sx, sy, swidth, sheight, dx, dy, dwidth, dheight);
+        }
+
         public void FillText(string text, double x, double y, double? maxWidth = null)
         {
             float? fmw = null;
