@@ -299,6 +299,44 @@ namespace UmCanvas
             };
             return Runtime.InvokeUnmarshalled<ArgStruct9<string, T0, T1, T2, T3, T4, T5, T6, T7>, TRes>(identifier, arg);
         }
+
+        public void Invoke<T0, T1, T2, T3, T4, T5, T6, T7, T8>(string identifier, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        {
+            InvokeRet<T0, T1, T2, T3, T4, T5, T6, T7, T8, object>(identifier, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        }
+
+        private struct ArgStruct10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+        {
+            public T0 Arg0;
+            public T1 Arg1;
+            public T2 Arg2;
+            public T3 Arg3;
+            public T4 Arg4;
+            public T5 Arg5;
+            public T6 Arg6;
+            public T7 Arg7;
+            public T8 Arg8;
+            public T9 Arg9;
+        }
+
+        public TRes InvokeRet<T0, T1, T2, T3, T4, T5, T6, T7, T8, TRes>(string identifier, T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        {
+            IncreaseInvokeTimes(identifier);
+            ArgStruct10<string, T0, T1, T2, T3, T4, T5, T6, T7, T8> arg = new ArgStruct10<string, T0, T1, T2, T3, T4, T5, T6, T7, T8>()
+            {
+                Arg0 = Id,
+                Arg1 = arg0,
+                Arg2 = arg1,
+                Arg3 = arg2,
+                Arg4 = arg3,
+                Arg5 = arg4,
+                Arg6 = arg5,
+                Arg7 = arg6,
+                Arg8 = arg7,
+                Arg9 = arg8,
+            };
+            return Runtime.InvokeUnmarshalled<ArgStruct10<string, T0, T1, T2, T3, T4, T5, T6, T7, T8>, TRes>(identifier, arg);
+        }
         #endregion
     }
 }
